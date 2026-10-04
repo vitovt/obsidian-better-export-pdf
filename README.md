@@ -39,6 +39,15 @@ or use the [BRAT Plugin](https://obsidian.md/plugins?id=obsidian42-brat).
 2. In the dialog box that is displayed, modify the configuration.
 3. Click `Export`, select the export path, and if you don't need to modify the configuration, you can directly press the `Enter` key to trigger the export operation.
 
+### Save next to the note
+
+Enable **Save next to the note** to skip the save dialog in either export engine.
+Existing PDFs at the destination are overwritten. **Add timestamp** also applies
+when saving next to notes. Batch exports put each PDF beside its source note,
+including notes in subfolders. A combined export from a TOC note is saved beside
+that note; a combined folder export is saved inside the selected folder using
+its name.
+
 ### Exclude H1 from PDF bookmarks
 
 Enable **Exclude H1 from PDF bookmarks** in the plugin settings to omit all H1

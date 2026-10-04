@@ -1,6 +1,6 @@
 import electron, { type WebviewTag } from "electron";
 const fs = require("fs").promises;
-import { Notice, type App, type FrontMatterCache, type TFile } from "obsidian";
+import { FileSystemAdapter, Notice, TFile, type App, type FrontMatterCache, type TFolder } from "obsidian";
 import path from "path";
 import { PDFArray, PDFDict, PDFDocument, PDFHexString, PDFName, PDFRef, StandardFonts } from "pdf-lib";
 
@@ -517,11 +517,16 @@ export async function getOutputFile(filename: string, isTimestamp?: boolean) {
  * Output path next to the note itself, without showing a save dialog.
  * An already existing PDF at that location is overwritten.
  */
-export function getSiblingOutputFile(app: App, file: TFile, isTimestamp?: boolean) {
-  // @ts-ignore `basePath` is not part of the public DataAdapter API
-  const basePath = app.vault.adapter.basePath as string;
-  const filename = file.basename + (isTimestamp ? "-" + Date.now() : "") + ".pdf";
-  return path.join(basePath, file.parent?.path ?? "", filename);
+export function getSiblingOutputFile(app: App, file: TFile | TFolder, isTimestamp?: boolean) {
+  const adapter = app.vault.adapter;
+  if (!(adapter instanceof FileSystemAdapter)) {
+    throw new Error("Saving next to a note requires a local filesystem vault.");
+  }
+  const isNote = file instanceof TFile;
+  const directory = isNote ? file.parent?.path ?? "" : file.path;
+  const basename = isNote ? file.basename : file.name || app.vault.getName();
+  const filename = basename + (isTimestamp ? "-" + Date.now() : "") + ".pdf";
+  return path.join(adapter.getBasePath(), directory, filename);
 }
 
 export async function getOutputPath(filename: string, isTimestamp?: boolean) {

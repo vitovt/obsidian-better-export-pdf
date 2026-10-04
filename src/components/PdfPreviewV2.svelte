@@ -245,7 +245,7 @@
       }
     } else {
       const outputFile = settings.saveNextToNote
-        ? getSiblingOutputFile(modal.app, modal.file as TFile, settings.isTimestamp)
+        ? getSiblingOutputFile(modal.app, modal.file, settings.isTimestamp)
         : await getOutputFile(title, settings.isTimestamp);
       if (!outputFile) {
         return false;
