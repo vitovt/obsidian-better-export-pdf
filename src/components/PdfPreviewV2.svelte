@@ -102,7 +102,7 @@
       return { doc, ...rest };
     });
 
-    previewEl?.querySelectorAll("h1.__title__").forEach((el: HTMLHeadElement) => {
+    previewEl?.querySelectorAll<HTMLHeadingElement>("h1.__title__").forEach((el) => {
       el.style.display = value ? "block" : "none";
     });
   }
