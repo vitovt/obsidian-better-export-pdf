@@ -373,6 +373,10 @@ function mergeObj(obj1: any, obj2: any, props: string[]) {
   return result;
 }
 
+export function getPrintTitle({ file, frontMatter }: Pick<DocType, "file" | "frontMatter">): string {
+  return String(frontMatter?.title ?? file.basename);
+}
+
 export function makePrintOptions(
   config: ExportConfigType & BetterExportPdfPluginSettings,
   frontMatter?: FrontMatterCache,

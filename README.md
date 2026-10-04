@@ -81,6 +81,10 @@ It can be any HTML fragment, such as adding a base64 image:
 </div>
 ```
 
+The `<span class="title">` value uses the note's frontmatter `title` when present,
+falling back to its filename. In v2 batch exports, each note uses its own title,
+header/footer templates and PDF metadata.
+
 Document level header/footer templates can also be configured in frontMatter:
 
 - `headerTemplate`

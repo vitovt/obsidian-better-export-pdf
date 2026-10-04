@@ -12,7 +12,7 @@
   import { loadPdfJs } from "obsidian";
   import * as os from "os";
   import * as path from "path";
-  import { editPDF, getOutputFile, getOutputPath, getSiblingOutputFile, makePrintOptions, writePdfFile } from "../pdf";
+  import { editPDF, getOutputFile, getOutputPath, getSiblingOutputFile, getPrintTitle, makePrintOptions, writePdfFile } from "../pdf";
   import Switch from "./Switch.svelte";
   import { Mutex } from "../utils/mutex";
   import { initRenderStates, completeRenderState, type RenderState } from "../utils/renderStates";
@@ -144,16 +144,18 @@
     el,
     outputFile,
     title,
+    frontMatter,
     onlyPreview = false,
   }: {
     el: HTMLDivElement;
     outputFile: string;
     title: string;
+    frontMatter?: DocType["frontMatter"];
     onlyPreview?: boolean;
   }) {
     console.debug("printOptions:", printOptions);
     const pdfOptions = {
-      ...printOptions,
+      ...makePrintOptions({ ...settings, ...config }, frontMatter),
       filepath: outputFile,
     };
 
@@ -181,7 +183,7 @@
 
     data = await editPDF(data, {
       headings: getHeadingTree(el as unknown as Document),
-      frontMatter: docs[0].frontMatter,
+      frontMatter,
       displayMetadata: settings?.displayMetadata,
       maxLevel: safeParseInt(settings?.maxLevel, 6),
       excludeH1FromBookmarks: config.excludeH1FromBookmarks,
@@ -215,12 +217,13 @@
     });
 
     for (const [i, outfile] of outfiles.entries()) {
-      const { doc, file, frontMatter } = docs[i] as { doc: HTMLDivElement; file: TFile; frontMatter: Record<string, unknown> };
-      const title = (frontMatter?.title as string | undefined) ?? file.basename;
+      const { doc: sourceDoc, frontMatter } = docs[i];
+      const doc = sourceDoc as HTMLDivElement;
+      const title = getPrintTitle(docs[i]);
       doc.style.display = "block";
       await sleep(200);
 
-      await exportToPDF({ el: doc, outputFile: outfile, title, onlyPreview });
+      await exportToPDF({ el: doc, outputFile: outfile, title, frontMatter, onlyPreview });
       doc.style.display = "none";
       if (cb) {
         await cb(outfile);
