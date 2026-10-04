@@ -9,10 +9,11 @@ import path from "path";
 const isDev = process.env.NODE_ENV === "development";
 
 export interface BetterExportPdfPluginSettings {
-  prevConfig?: ExportConfigType;
+  prevConfig?: Omit<ExportConfigType, "excludeH1FromBookmarks">;
 
   showTitle: boolean;
   maxLevel: string;
+  excludeH1FromBookmarks: boolean;
 
   displayHeader: boolean;
   displayFooter: boolean;
@@ -35,6 +36,7 @@ export interface BetterExportPdfPluginSettings {
 const DEFAULT_SETTINGS: BetterExportPdfPluginSettings = {
   showTitle: true,
   maxLevel: "6",
+  excludeH1FromBookmarks: false,
 
   displayHeader: true,
   displayFooter: true,

@@ -64,6 +64,17 @@
     }}
   ></div>
 
+  <div
+    use:settingToggle={{
+      name: i18n.settings.excludeH1FromBookmarks,
+      desc: i18n.settings.excludeH1FromBookmarksDesc,
+      value: config.excludeH1FromBookmarks,
+      onChange: (value) => {
+        config.excludeH1FromBookmarks = value;
+      },
+    }}
+  ></div>
+
   <!-- Page Size -->
   <div
     use:settingDropdown={{

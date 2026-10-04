@@ -184,6 +184,7 @@
       frontMatter: docs[0].frontMatter,
       displayMetadata: settings?.displayMetadata,
       maxLevel: safeParseInt(settings?.maxLevel, 6),
+      excludeH1FromBookmarks: config.excludeH1FromBookmarks,
     });
 
     const saved = await writePdfFile(outputFile, data);

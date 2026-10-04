@@ -32,7 +32,8 @@
   }
 
   export async function handleExport() {
-    plugin.settings.prevConfig = config;
+    const { excludeH1FromBookmarks, ...previousConfig } = config;
+    plugin.settings.prevConfig = previousConfig;
     await plugin.saveSettings();
 
     if (config["pageSize"] == "Custom") {

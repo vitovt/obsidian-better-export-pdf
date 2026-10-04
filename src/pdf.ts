@@ -100,30 +100,21 @@ export async function setAnchors(pdfDoc: PDFDocument, links: TPosition) {
   return links;
 }
 
-export function generateOutlines(root: TreeNode, positions: TPosition, maxLevel = 6) {
-  const _outline = (node: TreeNode) => {
-    if (node.level > maxLevel) {
-      return;
-    }
-    const [pageIdx, pos] = positions?.[node.key] ?? [0, 0];
-    const outline: PDFOutline = {
-      title: node.title,
-      to: [pageIdx, 0, pos],
-      open: false,
-      children: [],
-    };
-    if (node.children?.length > 0) {
-      for (const item of node.children) {
-        const child = _outline(item);
-        if (child) {
-          outline.children.push(child);
-        }
+export function generateOutlines(root: TreeNode, positions: TPosition, maxLevel = 6, excludeH1 = false) {
+  const outlineChildren = (node: TreeNode): PDFOutline[] =>
+    node.children.flatMap((child): PDFOutline[] => {
+      if (child.level > maxLevel) {
+        return [];
       }
-    }
-    return outline;
-  };
+      const children = outlineChildren(child);
+      if (excludeH1 && child.level === 1) {
+        return children;
+      }
+      const [pageIdx, pos] = positions?.[child.key] ?? [0, 0];
+      return [{ title: child.title, to: [pageIdx, 0, pos], open: false, children }];
+    });
 
-  return _outline(root)?.children ?? [];
+  return outlineChildren(root);
 }
 
 // From: https://github.com/marp-team/marp-cli/blob/d0cee502f2785e1a2f998f3afc831849e3f6efc9/src/utils/pdf.ts
@@ -315,6 +306,7 @@ export type PdfFrontMatterCache = {
 export type EditPDFParamType = {
   headings: TreeNode;
   maxLevel: number;
+  excludeH1FromBookmarks?: boolean;
   displayMetadata?: boolean;
   frontMatter?: PdfFrontMatterCache;
 };
@@ -322,14 +314,14 @@ export type EditPDFParamType = {
 // add outlines
 export async function editPDF(
   data: Uint8Array,
-  { headings, maxLevel, frontMatter, displayMetadata }: EditPDFParamType,
+  { headings, maxLevel, frontMatter, displayMetadata, excludeH1FromBookmarks }: EditPDFParamType,
 ): Promise<Uint8Array> {
   const pdfDoc = await PDFDocument.load(data);
   const posistions = await getDestPosition(pdfDoc);
 
   setAnchors(pdfDoc, posistions);
 
-  const outlines = generateOutlines(headings, posistions, maxLevel);
+  const outlines = generateOutlines(headings, posistions, maxLevel, excludeH1FromBookmarks);
 
   setOutline(pdfDoc, outlines);
   if (displayMetadata) {
@@ -485,6 +477,7 @@ export async function exportToPDF(
       frontMatter,
       displayMetadata: config?.displayMetadata,
       maxLevel: safeParseInt(config?.maxLevel, 6),
+      excludeH1FromBookmarks: config.excludeH1FromBookmarks,
     });
 
     const saved = await writePdfFile(outputFile, data);

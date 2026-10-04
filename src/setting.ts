@@ -111,6 +111,16 @@ export default class ConfigSettingTab extends PluginSettingTab {
     });
 
     new Setting(containerEl)
+      .setName(this.i18n.settings.excludeH1FromBookmarks)
+      .setDesc(this.i18n.settings.excludeH1FromBookmarksDesc)
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.excludeH1FromBookmarks).onChange(async (value) => {
+          this.plugin.settings.excludeH1FromBookmarks = value;
+          await this.plugin.saveSettings();
+        }),
+      );
+
+    new Setting(containerEl)
       .setName(this.i18n.settings.displayMetadata)
       .setDesc("Add frontMatter(title, author, keywords, subject creator, etc) to pdf metadata")
       .addToggle((toggle) =>

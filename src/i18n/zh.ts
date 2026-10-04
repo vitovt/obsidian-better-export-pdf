@@ -17,6 +17,8 @@ export default {
   },
 
   settings: {
+    excludeH1FromBookmarks: "从 PDF 书签中排除 H1",
+    excludeH1FromBookmarksDesc: "保留文档中的 H1 标题，但不将其添加到 PDF 书签。",
     showTitle: "将笔记名作为标题",
     displayHeader: "显示页眉",
     displayFooter: "显示页脚",

@@ -4,6 +4,7 @@
   "description": "This is a sample plugin for Obsidian (https://obsidian.md)",
   "main": "main.js",
   "scripts": {
+    "test": "node --test tests/*.test.mjs",
     "dev": "node esbuild.config.mjs",
     "dev:vite": "vite build --watch --mode development",
     "build:vite": "vite build",

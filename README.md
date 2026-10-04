@@ -39,6 +39,18 @@ or use the [BRAT Plugin](https://obsidian.md/plugins?id=obsidian42-brat).
 2. In the dialog box that is displayed, modify the configuration.
 3. Click `Export`, select the export path, and if you don't need to modify the configuration, you can directly press the `Enter` key to trigger the export operation.
 
+### Exclude H1 from PDF bookmarks
+
+Enable **Exclude H1 from PDF bookmarks** in the plugin settings to omit all H1
+headings (including the generated note title) from the PDF bookmark outline.
+Headings and links in the document stay unchanged. Child bookmarks are promoted
+while preserving their order and nesting; the maximum heading level still applies
+to the original H1–H6 levels.
+
+The same toggle in the export preview overrides this preference for that dialog
+only. Each new dialog starts with the plugin setting, even when reusing previous
+export settings. This works with both v1 and v2 and is disabled by default.
+
 ### Set the header and footer
 
 Set page numbers using the `Header Template` and `Footer Template`, for example:

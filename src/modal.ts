@@ -21,6 +21,7 @@ export interface ExportConfigType {
   landscape: boolean;
   scale: number;
   showTitle: boolean;
+  excludeH1FromBookmarks: boolean;
   displayHeader: boolean;
   displayFooter: boolean;
 
@@ -80,6 +81,8 @@ export class ExportConfigModal extends Modal {
       displayFooter: plugin.settings.displayHeader ?? true,
       cssSnippet: "0",
       ...(plugin.settings.prevConfig ?? {}),
+      // This override belongs to one dialog, never to the previous export.
+      excludeH1FromBookmarks: plugin.settings.excludeH1FromBookmarks ?? false,
     } as ExportConfigType;
   }
 

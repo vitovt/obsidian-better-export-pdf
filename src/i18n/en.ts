@@ -13,6 +13,8 @@ export default {
     cssSnippets: "CSS snippets",
   },
   settings: {
+    excludeH1FromBookmarks: "Exclude H1 from PDF bookmarks",
+    excludeH1FromBookmarksDesc: "Keep H1 headings in the document, but omit them from PDF bookmarks.",
     showTitle: "Add file name as title",
     displayHeader: "Display headers",
     displayFooter: "Display footer",
